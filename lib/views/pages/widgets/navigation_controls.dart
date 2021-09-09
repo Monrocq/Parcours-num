@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
-
+import 'package:parcours_numerique_app/const.dart';
 import '../../../globals.dart';
 
 
@@ -20,50 +20,57 @@ class NavigationControls extends StatelessWidget {
         final bool webViewReady =
             snapshot.connectionState == ConnectionState.done;
         final WebViewController controller = snapshot.data!;
-        return Row(
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: !webViewReady
-                  ? null
-                  : () async {
-                if (await controller.canGoBack()) {
-                  await controller.goBack();
-                } else {
-                  // ignore: deprecated_member_use
-                  Scaffold.of(context).showSnackBar(
-                    const SnackBar(content: Text("No back history item")),
-                  );
-                  return;
-                }
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.arrow_forward_ios),
-              onPressed: !webViewReady
-                  ? null
-                  : () async {
-                if (await controller.canGoForward()) {
-                  await controller.goForward();
-                } else {
-                  // ignore: deprecated_member_use
-                  Scaffold.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("No forward history item")),
-                  );
-                  return;
-                }
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.replay),
-              onPressed: !webViewReady
-                  ? null
-                  : () {
-                controller.reload();
-              },
-            ),
-          ],
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 25),
+          color: ACCENT_COLOR,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: !webViewReady
+                      ? null
+                      : () async {
+                    if (await controller.canGoBack()) {
+                      await controller.goBack();
+                    } else {
+                      // ignore: deprecated_member_use
+                      Scaffold.of(context).showSnackBar(
+                        const SnackBar(content: Text("No back history item")),
+                      );
+                      return;
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios),
+                  onPressed: !webViewReady
+                      ? null
+                      : () async {
+                    if (await controller.canGoForward()) {
+                      await controller.goForward();
+                    } else {
+                      // ignore: deprecated_member_use
+                      Scaffold.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("No forward history item")),
+                      );
+                      return;
+                    }
+                  },
+                ),
+              ],),
+              IconButton(
+                icon: const Icon(Icons.replay),
+                onPressed: !webViewReady
+                    ? null
+                    : () {
+                  controller.reload();
+                },
+              ),
+            ],
+          ),
         );
       },
     );

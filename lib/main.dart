@@ -60,34 +60,41 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: primaryColor,
-          leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){}, icon: const Icon(Icons.home))),
-          actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.video_library_outlined)),
-            // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
-            // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
-            // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
-          ],
-          bottom: TabBar(tabs: [
-            Tab(text: 'Diagnostic',),
-            Tab(text: 'Solutions',),
-            Tab(text: 'Formations',)
-          ],
-            indicatorColor: accentColor,
-            controller: tabController,
-          ),
-        ),
-        body: TabBarView(children: [
-          PageLayout(widget: DiagnosticPage(controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
-          PageLayout(widget: SolutionsPage(controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
-          PageLayout(widget: FormationsPage(controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
-          //Container(child: Text('Test'),),
-          //Container(child: Text('Test'),),
-        ], controller: tabController,),
-         // This trailing comma makes auto-formatting nicer for build methods.
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+              backgroundColor: PRIMARY_COLOR,
+              actions: [
+                //IconButton(onPressed: _openEndDrawer, icon: Icon(Icons.video_library_outlined)),
+                // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+                // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
+                // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
+              ],
+              leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){}, icon: const Icon(Icons.home))),
+              bottom: TabBar(tabs: [
+                Tab(text: 'Diagnostic',),
+                Tab(text: 'Solutions',),
+                Tab(text: 'Formations',)
+              ],
+                indicatorColor: ACCENT_COLOR,
+                controller: tabController,
+              ),
+            ),
+            body: TabBarView(children: [
+              PageLayout(widget: DiagnosticPage(controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
+              PageLayout(widget: SolutionsPage(controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
+              PageLayout(widget: FormationsPage(controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
+              //Container(child: Text('Test'),),
+              //Container(child: Text('Test'),),
+            ], controller: tabController,),
+             endDrawer: const Drawer(
+               child: Text('Videos'),
+             ),
+             // This trailing comma makes auto-formatting nicer for build methods.
+          );
+        }
       ),
 
     );
