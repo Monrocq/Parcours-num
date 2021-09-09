@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class FormationsPage extends StatefulWidget {
   const FormationsPage({Key? key}) : super(key: key);
+  static const String routeName = 'formations-page';
 
   @override
   _FormationsPageState createState() => _FormationsPageState();
@@ -11,7 +12,7 @@ class FormationsPage extends StatefulWidget {
 class _FormationsPageState extends State<FormationsPage> with AutomaticKeepAliveClientMixin<FormationsPage> {
   @override
   Widget build(BuildContext context) {
-    return const WebViewCustom(url: 'https://transition-numerique.l-ecole.com/parcoursnum/');
+    return const WebViewCustom(url: 'https://transition-numerique.l-ecole.com/parcoursnum/', routeFrom: FormationsPage.routeName,);
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class SolutionsPage extends StatefulWidget {
   const SolutionsPage({Key? key}) : super(key: key);
+  static const String routeName = 'solutions-page';
 
   @override
   _SolutionsPageState createState() => _SolutionsPageState();
@@ -11,7 +12,7 @@ class SolutionsPage extends StatefulWidget {
 class _SolutionsPageState extends State<SolutionsPage> with AutomaticKeepAliveClientMixin<SolutionsPage> {
   @override
   Widget build(BuildContext context) {
-    return const WebViewCustom(url: 'https://parcoursnumerique.motherbase.ai/');
+    return const WebViewCustom(url: 'https://parcoursnumerique.motherbase.ai/', routeFrom: SolutionsPage.routeName,);
   }
 
   @override

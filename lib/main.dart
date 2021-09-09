@@ -37,10 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 }
 
-class _MyHomePageState extends State<MyHomePage> with AutomaticKeepAliveClientMixin {
-
-  @override
-  bool get wantKeepAlive => true;
+class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
@@ -62,17 +59,13 @@ class _MyHomePageState extends State<MyHomePage> with AutomaticKeepAliveClientMi
         appBar: AppBar(
           title: Text(widget.title),
           backgroundColor: primaryColor,
-          leading: Builder(builder: (BuildContext context) => Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: IconButton(onPressed: (){}, icon: const Icon(Icons.home)),
-          )),
+          leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){}, icon: const Icon(Icons.home))),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: IconButton(onPressed: (){
+            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
+            IconButton(onPressed: (){
 
-              }, icon: const Icon(Icons.loop)),
-            )
+            }, icon: const Icon(Icons.loop))
           ],
           bottom: const TabBar(tabs: [
             Tab(text: 'Diagnostic',),
