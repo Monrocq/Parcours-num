@@ -1,10 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:parcours_numerique_app/const.dart';
-import 'package:parcours_numerique_app/pages/diagnostic.dart';
-import 'package:parcours_numerique_app/pages/formations.dart';
-import 'package:parcours_numerique_app/pages/solutions.dart';
+import 'package:parcours_numerique_app/views/page_layout.dart';
+import 'package:parcours_numerique_app/views/pages/diagnostic.dart';
+import 'package:parcours_numerique_app/views/pages/formations.dart';
+import 'package:parcours_numerique_app/views/pages/solutions.dart';
+import 'package:parcours_numerique_app/views/pages/widgets/navigation_controls.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
+
+import 'globals.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,22 +44,20 @@ class MyHomePage extends StatefulWidget {
 
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
     super.initState();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    tabController = TabController(
+      length: 3,
+      vsync: this,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -61,25 +66,30 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: primaryColor,
           leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){}, icon: const Icon(Icons.home))),
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
-            IconButton(onPressed: (){
-
-            }, icon: const Icon(Icons.loop))
+            IconButton(onPressed: (){}, icon: Icon(Icons.video_library_outlined)),
+            // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+            // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
+            // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
           ],
-          bottom: const TabBar(tabs: [
+          bottom: TabBar(tabs: [
             Tab(text: 'Diagnostic',),
             Tab(text: 'Solutions',),
             Tab(text: 'Formations',)
-          ], indicatorColor: accentColor,),
+          ],
+            indicatorColor: accentColor,
+            controller: tabController,
+          ),
         ),
-        body: const TabBarView(children: [
-          DiagnosticPage(),
-          SolutionsPage(),
-          FormationsPage(),
-        ])
+        body: TabBarView(children: [
+          PageLayout(widget: DiagnosticPage(controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
+          PageLayout(widget: SolutionsPage(controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
+          PageLayout(widget: FormationsPage(controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
+          //Container(child: Text('Test'),),
+          //Container(child: Text('Test'),),
+        ], controller: tabController,),
          // This trailing comma makes auto-formatting nicer for build methods.
       ),
+
     );
   }
 }
