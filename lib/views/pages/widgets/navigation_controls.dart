@@ -19,7 +19,7 @@ class NavigationControls extends StatelessWidget {
           (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
         final bool webViewReady =
             snapshot.connectionState == ConnectionState.done;
-        final WebViewController controller = snapshot.data!;
+        final controller = snapshot.data!;
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 25),
           color: ACCENT_COLOR,
@@ -37,7 +37,7 @@ class NavigationControls extends StatelessWidget {
                     } else {
                       // ignore: deprecated_member_use
                       Scaffold.of(context).showSnackBar(
-                        const SnackBar(content: Text("No back history item")),
+                        const SnackBar(content: Text("Aucun élement précédent à afficher")),
                       );
                       return;
                     }
@@ -54,7 +54,7 @@ class NavigationControls extends StatelessWidget {
                       // ignore: deprecated_member_use
                       Scaffold.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text("No forward history item")),
+                            content: Text("Aucun élement à afficher")),
                       );
                       return;
                     }

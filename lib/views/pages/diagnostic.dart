@@ -16,6 +16,7 @@ class DiagnosticPage extends StatefulWidget {
 }
 
 class _DiagnosticPageState extends State<DiagnosticPage> with AutomaticKeepAliveClientMixin<DiagnosticPage> {
+
   @override
   Widget build(BuildContext context) {
     return WebViewCustom(url: 'https://parcoursnum.reussiravecleweb.fr/', routeFrom: DiagnosticPage.routeName, controller: widget.controller,);

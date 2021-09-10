@@ -8,11 +8,12 @@ class PageLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
         Expanded(child: widget),
         navigationControls
       ],
+      alignment: AlignmentDirectional.bottomCenter,
     );
   }
 }
