@@ -40,6 +40,10 @@ dependencies:
   csv: ^5.0.0
   flutter_native_splash: ^1.2.3
   flutter_launcher_icons: ^0.9.2
+  introduction_screen: ^2.1.0
+  after_layout: ^1.1.0
+  lottie: ^1.2.1
+  shared_preferences: ^2.0.8
 
 dev_dependencies:
   flutter_test:
@@ -65,14 +69,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/img/logo.png
+    - lib/assets/img/
   #   - images/a_dot_ham.jpeg
-    - lib/assets/img/be-racing.png
-    - lib/assets/img/etre-amis.png
-    - lib/assets/img/ltj2.png
-    - lib/assets/img/maillard&maillard.png
-    - lib/assets/img/penn-foll.png
-    - lib/assets/img/wee-keys.png
+    - lib/assets/img/cover/
+    - lib/assets/img/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'dart:ui' as ui;
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:parcours_numerique_app/const.dart';
 import 'package:parcours_numerique_app/views/page_layout.dart';
 import 'package:parcours_numerique_app/views/pages/diagnostic.dart';
 import 'package:parcours_numerique_app/views/pages/formations.dart';
+import 'package:parcours_numerique_app/views/pages/intro_screen.dart';
 import 'package:parcours_numerique_app/views/pages/solutions.dart';
 import 'package:parcours_numerique_app/views/pages/widgets/navigation_controls.dart';
 import 'package:parcours_numerique_app/views/videos_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
@@ -23,18 +27,51 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late SharedPreferences prefs;
+  bool seen = false;
+
+  @override
+  void initState() {
+    displayIntro();
+    super.initState();
+  }
+
+  displayIntro() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      seen = prefs.getBool('seen') ?? false;
+    });
+  }
+
+  // @override
+  // void afterFirstLayout(BuildContext context) => checkFirstSeen(context);
+
+  // Future checkFirstSeen(context) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool? _seen = prefs.getBool('seen');
+  //   print(_seen);
+  //   if (_seen == false || _seen == null) {
+  //     Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(builder: (context) => IntroScreen(redirect: MyHomePage(title: 'Parcours numérique'))));
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
       ),
-      home: const MyHomePage(title: 'Parcours numérique'),
+      home: seen? MyHomePage(title: 'Parcours numérique') : IntroScreen(redirect: MyHomePage(title: 'Parcours numérique')),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -53,6 +90,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
+
 
   @override
   void initState() {
@@ -105,47 +143,50 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            key: _key,
-            appBar: AppBar(
-              centerTitle: true,
-              title: Text(widget.title),
-              backgroundColor: PRIMARY_COLOR,
-              actions: [
-                IconButton(onPressed: () => _key.currentState!.openEndDrawer(), icon: Icon(Icons.video_library_outlined)),
-                // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
-                // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
-                // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
-              ],
-              leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){
-                _showMyDialog();
-              }, icon: const Icon(Icons.open_in_browser))),
-              bottom: TabBar(tabs: [
-                Tab(text: 'Diagnostic',),
-                Tab(text: 'Solutions',),
-                Tab(text: 'Formations',)
-              ],
-                indicatorColor: ACCENT_COLOR,
-                controller: tabController,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: DefaultTabController(
+        length: 3,
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              key: _key,
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text(widget.title),
+                backgroundColor: PRIMARY_COLOR,
+                actions: [
+                  IconButton(onPressed: () => _key.currentState!.openEndDrawer(), icon: Icon(Icons.video_library_outlined)),
+                  // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+                  // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
+                  // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
+                ],
+                leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){
+                  _showMyDialog();
+                }, icon: const Icon(Icons.open_in_browser))),
+                bottom: TabBar(tabs: [
+                  Tab(text: 'Diagnostic',),
+                  Tab(text: 'Solutions',),
+                  Tab(text: 'Formations',)
+                ],
+                  indicatorColor: ACCENT_COLOR,
+                  controller: tabController,
+                ),
               ),
-            ),
-            body: TabBarView(children: [
-              PageLayout(widget: DiagnosticPage(controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
-              PageLayout(widget: SolutionsPage(controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
-              PageLayout(widget: FormationsPage(controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
-              //Container(child: Text('Test'),),
-              //Container(child: Text('Test'),),
-            ], controller: tabController, physics: NeverScrollableScrollPhysics(),),
-             endDrawer: VideosDrawer()
-             // This trailing comma makes auto-formatting nicer for build methods.
-          );
-        }
-      ),
+              body: TabBarView(children: [
+                PageLayout(widget: DiagnosticPage(controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
+                PageLayout(widget: SolutionsPage(controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
+                PageLayout(widget: FormationsPage(controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
+                //Container(child: Text('Test'),),
+                //Container(child: Text('Test'),),
+              ], controller: tabController, physics: NeverScrollableScrollPhysics(),),
+               endDrawer: VideosDrawer()
+               // This trailing comma makes auto-formatting nicer for build methods.
+            );
+          }
+        ),
 
+      ),
     );
   }
 }
