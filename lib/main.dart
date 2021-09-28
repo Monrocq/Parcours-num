@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:parcours_numerique_app/const.dart';
 import 'package:parcours_numerique_app/views/page_layout.dart';
 import 'package:parcours_numerique_app/views/pages/diagnostic.dart';
@@ -17,8 +18,8 @@ import 'dart:io';
 import 'globals.dart';
 
 void main() {
-  RenderErrorBox.backgroundColor = Colors.transparent;
-  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+  //RenderErrorBox.backgroundColor = Colors.transparent;
+  //RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
   runApp(const MyApp());
 }
 
@@ -111,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return Scaffold(
             key: _key,
             appBar: AppBar(
+              centerTitle: true,
               title: Text(widget.title),
               backgroundColor: PRIMARY_COLOR,
               actions: [

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:parcours_numerique_app/views/pages/solutions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -21,6 +23,10 @@ class _WebViewCustomState extends State<WebViewCustom> {
 
   void _launchURL(_url) async =>
       await canLaunch(_url) ? await launch(_url, enableJavaScript: true) : throw 'Could not launch $_url';
+
+  Widget _loadingProgress() =>
+    Platform.isAndroid ? CircularProgressIndicator() : CupertinoActivityIndicator();
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class _WebViewCustomState extends State<WebViewCustom> {
           },
         ),
         isLoading ? Center(
-          child: CircularProgressIndicator(),
+          child: _loadingProgress(),
         ) : Stack()
       ],
     );

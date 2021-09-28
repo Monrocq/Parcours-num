@@ -20,15 +20,15 @@ class NavigationControls extends StatelessWidget {
         final bool webViewReady =
             snapshot.connectionState == ConnectionState.done;
         final controller = snapshot.data!;
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 25),
-          color: ACCENT_COLOR,
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Row(children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
+                FloatingActionButton(
+                  backgroundColor: WEBVIEW_CONTROLLER_COLOR,
+                  child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
                   onPressed: !webViewReady
                       ? null
                       : () async {
@@ -43,8 +43,9 @@ class NavigationControls extends StatelessWidget {
                     }
                   },
                 ),
+                /**
                 IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
+                  icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
                   onPressed: !webViewReady
                       ? null
                       : () async {
@@ -59,10 +60,11 @@ class NavigationControls extends StatelessWidget {
                       return;
                     }
                   },
-                ),
+                ), */
               ],),
-              IconButton(
-                icon: const Icon(Icons.replay),
+              FloatingActionButton(
+                backgroundColor: WEBVIEW_CONTROLLER_COLOR,
+                child: const Icon(Icons.replay, color: Colors.white,),
                 onPressed: !webViewReady
                     ? null
                     : () {

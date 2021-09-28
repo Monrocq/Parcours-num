@@ -1,9 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.parcours_numerique_app">
+    package="com.digital_saint_malo.parcours_numerique_app">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="parcours_numerique_app"
-        android:icon="@mipmap/launcher_icon">
+        android:label="Parcours Numérique"
+        android:icon="@mipmap/launcher_icon"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

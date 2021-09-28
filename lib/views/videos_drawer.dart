@@ -44,6 +44,7 @@ class VideosDrawer extends StatelessWidget {
     return Drawer(
       child: CustomScrollView(
         slivers: [
+          /**
           SliverAppBar(
             backgroundColor: Colors.white,
             flexibleSpace: FlexibleSpaceBar(
@@ -52,11 +53,11 @@ class VideosDrawer extends StatelessWidget {
             ),
             expandedHeight: 100,
             //collapsedHeight: 120,
-          ),
+          ), */
           SliverAppBar(
             //toolbarHeight: 20,
             backgroundColor: ACCENT_COLOR,
-            title: Text('Videos'),
+            title: Text('Espace Vidéos'),
             floating: true,
             primary: true,
             pinned: true,
