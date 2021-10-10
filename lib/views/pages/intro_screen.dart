@@ -3,9 +3,12 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../main.dart';
+
 class IntroScreen extends StatefulWidget {
-  Widget redirect;
-  IntroScreen({required this.redirect});
+  String from;
+  int index;
+  IntroScreen({required this.from, this.index = 1});
 
   @override
   _IntroScreenState createState() => _IntroScreenState();
@@ -27,15 +30,17 @@ class _IntroScreenState extends State<IntroScreen> {
 
   void _desactivateIntroduction(context) async {
     await prefs.setBool('seen', true);
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => widget.redirect),
-    );
+    _onIntroEnd(context);
   }
 
   void _onIntroEnd(context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => widget.redirect),
-    );
+    if (widget.from == "main") {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => MyHomePage(title: 'Parcours numérique'), ),
+      );
+    } else {
+      Navigator.of(context).pop();
+    }
   }
 
   Widget _buildFullscrenImage() {
@@ -81,7 +86,7 @@ class _IntroScreenState extends State<IntroScreen> {
       //     ),
       //   ),
       // ),
-      globalFooter: SafeArea(
+      globalFooter: widget.index == 1 ? SafeArea(
         child: SizedBox(
           width: double.infinity,
           height: 60,
@@ -93,8 +98,9 @@ class _IntroScreenState extends State<IntroScreen> {
             onPressed: () => _onIntroEnd(context),
           ),
         ),
-      ),
+      ) : Container(),
       pages: [
+        /**
         PageViewModel(
           title: "CRM, GRC, Progiciel, E-commerce, etc... 🤯",
           body:
@@ -102,10 +108,11 @@ class _IntroScreenState extends State<IntroScreen> {
           image: Lottie.network('https://assets10.lottiefiles.com/packages/lf20_sk5h1kfn.json'),
           decoration: pageDecoration,
         ),
+            */
         PageViewModel(
-          title: "Bienvenue sur Parcours Numérique",
+          title: "Bienvenue sur \nParcours Numérique",
           body:
-          "Parcours numérique accompagne et guide les petites entreprises dans le choix de leurs outils digitaux ",
+          "Parcours Numérique accompagne les entreprises de proximité, les commerçants et les TPE, dans leur choix de solutions et technologies numériques pour leur activité professionnelle",
           image: Stack(children: [
             Lottie.network('https://assets7.lottiefiles.com/packages/lf20_daqsbzrp.json'),
             Padding(
@@ -116,29 +123,29 @@ class _IntroScreenState extends State<IntroScreen> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Explorer les solutions",
+          title: "Réussir avec le Web",
           body:
-          "Accédez à un riche catalogue de solutions. Vous trouverez forcément l'outil dont vous nécessitez",
-          image: Lottie.network('https://assets6.lottiefiles.com/packages/lf20_jtvduiqm.json'),
-          decoration: pageDecoration,
-        ),
-        PageViewModel(
-          title: "Diagnostic Digital",
-          body:
-          "Etablissez un check-up digital afin de visualiser où la digitalisation peut vous être bénéfique",
+          "En partenariat avec l'AFNIC, Parcours Numérique vous propose un bilan de maturité numérique et un plan d'action",
           image: Lottie.network('https://assets7.lottiefiles.com/packages/lf20_xkmq5z4e.json'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Découvrir les formations",
+          title: "Trouver la solution",
           body:
-          "Vous préferez vous faire accompagner? Découvrez nos nombreuses formations",
+          "Parcours Numérique propose une sélection de solutions logicielles par activité professionnelle et maturité numérique",
+          image: Lottie.network('https://assets6.lottiefiles.com/packages/lf20_jtvduiqm.json'),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Se former au numérique",
+          body:
+          "Formez-vous ou vos collaborateurs avec notre partenaire l-ecole.com",
           image: Lottie.network('https://assets1.lottiefiles.com/packages/lf20_26ewjioz.json'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Introduction terminée",
-          body: "Faites de Parcours Numérique votre nouveau compagnon pour propulser votre business!",
+          title: "Artisans, Commerçants, TPE",
+          body: "Faites de Parcours Numérique votre compagnon pour votre transformation digitale",
           image: Lottie.network('https://assets5.lottiefiles.com/packages/lf20_rmlyntkm.json'),
           decoration: pageDecoration,
         ),
@@ -149,12 +156,12 @@ class _IntroScreenState extends State<IntroScreen> {
       skipFlex: 0,
       nextFlex: 0,
       //rtl: true, // Display as right-to-left
-      initialPage: 1,
+      initialPage: 0, //widget.index,
       skip: Text('Passer'),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Ne plus revoir', style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text('Terminer', style: TextStyle(fontWeight: FontWeight.w600)),
       curve: Curves.fastLinearToSlowEaseIn,
-      controlsMargin: const EdgeInsets.symmetric(horizontal: 16),
+      controlsMargin: EdgeInsets.symmetric(horizontal: 16, vertical: widget.index == 0 ? 16 : 0),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),

@@ -28,6 +28,8 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  final String routeName = 'main';
+
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -67,11 +69,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Parcours numérique',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: seen? MyHomePage(title: 'Parcours numérique') : IntroScreen(redirect: MyHomePage(title: 'Parcours numérique')),
+      home: seen? MyHomePage(title: 'Parcours numérique') : IntroScreen(from: 'main'),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -81,6 +83,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
+  final String routeName = 'home';
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -156,6 +159,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 title: Text(widget.title),
                 backgroundColor: PRIMARY_COLOR,
                 actions: [
+                  IconButton(onPressed: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => IntroScreen(from: 'home', index: 0))
+                    );
+                  }, icon: Icon(Icons.lightbulb)),
                   IconButton(onPressed: () => _key.currentState!.openEndDrawer(), icon: Icon(Icons.video_library_outlined)),
                   // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
                   // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
