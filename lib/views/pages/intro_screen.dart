@@ -76,6 +76,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
     return IntroductionScreen(
       key: introKey,
+      globalHeader: widget.index == 1 ? SafeArea(child: Container(child: IconButton(icon: Icon(Icons.close, color: Colors.blueGrey, size: 33,), onPressed: () => _onIntroEnd(context),), alignment: Alignment.centerRight, margin: EdgeInsets.only(right: 8),)) : Container() ,
       globalBackgroundColor: Colors.white,
       // globalHeader: Align(
       //   alignment: Alignment.topRight,
@@ -86,19 +87,19 @@ class _IntroScreenState extends State<IntroScreen> {
       //     ),
       //   ),
       // ),
-      globalFooter: widget.index == 1 ? SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          height: 60,
-          child: ElevatedButton(
-            child: const Text(
-              'Revoir plus tard',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-            onPressed: () => _onIntroEnd(context),
-          ),
-        ),
-      ) : Container(),
+      // globalFooter: widget.index == 1 ? SafeArea(
+      //   child: SizedBox(
+      //     width: double.infinity,
+      //     height: 60,
+      //     child: ElevatedButton(
+      //       child: const Text(
+      //         'Revoir plus tard',
+      //         style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+      //       ),
+      //       onPressed: () => _onIntroEnd(context),
+      //     ),
+      //   ),
+      // ) : Container(),
       pages: [
         /**
         PageViewModel(
@@ -157,9 +158,9 @@ class _IntroScreenState extends State<IntroScreen> {
       nextFlex: 0,
       //rtl: true, // Display as right-to-left
       initialPage: 0, //widget.index,
-      skip: Text('Passer'),
-      next: const Icon(Icons.arrow_forward),
-      done: const Text('Terminer', style: TextStyle(fontWeight: FontWeight.w600)),
+      skip: Text('Passer', style: TextStyle(color: Colors.lightBlue)),
+      next: const Icon(Icons.arrow_forward, color: Colors.lightBlue,),
+      done: const Text('Terminer', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.lightBlue)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: EdgeInsets.symmetric(horizontal: 16, vertical: widget.index == 0 ? 16 : 0),
       dotsDecorator: const DotsDecorator(
