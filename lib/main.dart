@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:after_layout/after_layout.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -24,13 +25,13 @@ import 'globals.dart';
 void main() {
   //RenderErrorBox.backgroundColor = Colors.transparent;
   //RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
   final String routeName = 'main';
 
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -80,7 +81,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
   final String routeName = 'home';
@@ -93,7 +94,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-
+  Key diagnosticKey = UniqueKey();
+  Key solutionKey = UniqueKey();
+  Key formationKey = UniqueKey();
 
   @override
   void initState() {
@@ -110,6 +113,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       await canLaunch(_url) ? await launch(_url, enableJavaScript: true) : throw 'Could not launch $_url';
 
   Future<void> _showMyDialog() async {
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -146,51 +150,104 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _tabBarViews = [
+      PageLayout(widget: DiagnosticPage(key: diagnosticKey, controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
+      PageLayout(widget: SolutionsPage(key: solutionKey, controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
+      PageLayout(widget: FormationsPage(key: formationKey, controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
+    ];
     return WillPopScope(
       onWillPop: () async => false,
       child: DefaultTabController(
         length: 3,
         child: Builder(
           builder: (context) {
-            return Scaffold(
-              key: _key,
-              appBar: AppBar(
-                centerTitle: true,
-                title: Text(widget.title),
-                backgroundColor: PRIMARY_COLOR,
-                actions: [
-                  IconButton(onPressed: (){
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => IntroScreen(from: 'home', index: 0))
-                    );
-                  }, icon: Icon(Icons.lightbulb)),
-                  IconButton(onPressed: () => _key.currentState!.openEndDrawer(), icon: Icon(Icons.video_library_outlined)),
-                  // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
-                  // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
-                  // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
-                ],
-                leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){
-                  _showMyDialog();
-                }, icon: const Icon(Icons.open_in_browser))),
-                bottom: TabBar(tabs: [
-                  Tab(text: 'Diagnostic',),
-                  Tab(text: 'Solutions',),
-                  Tab(text: 'Formations',)
-                ],
-                  indicatorColor: ACCENT_COLOR,
-                  controller: tabController,
-                ),
-              ),
-              body: TabBarView(children: [
-                PageLayout(widget: DiagnosticPage(controller: controllers[0],), navigationControls: NavigationControls(controllers[0].future)),
-                PageLayout(widget: SolutionsPage(controller: controllers[1],), navigationControls: NavigationControls(controllers[1].future)),
-                PageLayout(widget: FormationsPage(controller: controllers[2],), navigationControls: NavigationControls(controllers[2].future)),
-                //Container(child: Text('Test'),),
-                //Container(child: Text('Test'),),
-              ], controller: tabController, physics: NeverScrollableScrollPhysics(),),
-               endDrawer: VideosDrawer()
-               // This trailing comma makes auto-formatting nicer for build methods.
-            );
+            if (true) {
+              return Scaffold(
+                  key: _key,
+                  appBar: AppBar(
+                    centerTitle: true,
+                    title: Text(widget.title),
+                    backgroundColor: PRIMARY_COLOR,
+                    actions: [
+                      IconButton(onPressed: (){
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => IntroScreen(from: 'home', index: 0))
+                        );
+                      }, icon: Icon(Icons.lightbulb)),
+                      IconButton(onPressed: () => _key.currentState!.openEndDrawer(), icon: Icon(Icons.video_library_outlined)),
+                      // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+                      // IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios)),
+                      // IconButton(onPressed: (){}, icon: const Icon(Icons.loop))
+                    ],
+                    titleSpacing: 0,
+                    leading: Builder(builder: (BuildContext context) => IconButton(onPressed: (){
+                      _showMyDialog();
+                    }, icon: const Icon(Icons.open_in_browser))),
+                    bottom: Platform.isAndroid ? TabBar(tabs: const [
+                      Tab(text: 'Diagnostic',),
+                      Tab(text: 'Solutions',),
+                      Tab(text: 'Formations',)
+                    ],
+                      indicatorColor: ACCENT_COLOR,
+                      controller: tabController,
+                    ) : null,
+                  ),
+                  body: TabBarView(children: _tabBarViews, controller: tabController, physics: NeverScrollableScrollPhysics(),),
+                  endDrawer: VideosDrawer(),
+                bottomNavigationBar: Platform.isIOS ? CupertinoTabBar(
+                  iconSize: 25,
+                  onTap: (index) {
+                    print(index);
+                    setState(() {
+                      tabController.animateTo(index);
+                      if (tabController.indexIsChanging == false) {
+                        switch (index) {
+                          case 0: {
+                            diagnosticKey = UniqueKey();
+                            break;
+                          }
+                          case 1: {
+                            solutionKey = UniqueKey();
+                            break;
+                          }
+                          case 2: {
+                            formationKey = UniqueKey();
+                            break;
+                          }
+                        }
+                      };
+                    });
+                  },
+                  //backgroundColor: PRIMARY_COLOR,
+                  activeColor: PRIMARY_COLOR,
+                  inactiveColor: Colors.grey.shade700,
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.doc_chart_fill,
+                      ),
+                      label: 'Diagnostic'
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.square_stack_3d_up_fill,
+                      ),
+                      label: 'Solutions'
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(
+                        CupertinoIcons.book_fill
+                      ),
+                      label: 'Formations'
+                    ),
+                  ],
+                  currentIndex: tabController.index,
+                ) : null,
+                // This trailing comma makes auto-formatting nicer for build methods.
+              );
+            } else if (Platform.isIOS) {
+
+            }
           }
         ),
 

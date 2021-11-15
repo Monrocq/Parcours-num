@@ -23,3 +23,5 @@ class _FormationsPageState extends State<FormationsPage> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => true;
 }
+
+

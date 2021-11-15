@@ -42,7 +42,9 @@ class _WebViewCustomState extends State<WebViewCustom> {
           gestureNavigationEnabled: true,
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
-            widget.controller.complete(webViewController);
+            if (Platform.isAndroid) {
+              widget.controller.complete(webViewController);
+            }
           },
           navigationDelegate: (NavigationRequest request) {
             if (!request.url.startsWith('https://parcoursnumerique.motherbase.ai/') && widget.routeFrom == SolutionsPage.routeName) {

@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:parcours_numerique_app/views/pages/widgets/navigation_controls.dart';
 
@@ -24,7 +27,8 @@ class _PageLayoutState extends State<PageLayout> with SingleTickerProviderStateM
     return SafeArea(
       child: AnimatedBuilder(
         animation: _controller,
-        builder: (context, child) => Stack(
+        builder: (context, child) =>
+            Stack(
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -36,7 +40,7 @@ class _PageLayoutState extends State<PageLayout> with SingleTickerProviderStateM
               }
             },),
             widget.widget,
-            Transform.translate(child: widget.navigationControls, offset: Offset(0, -_controller.value * 64),),
+            Platform.isAndroid ? Transform.translate(child: widget.navigationControls, offset: Offset(0, -_controller.value * 64),) : SizedBox(),
           ],
           alignment: AlignmentDirectional.bottomCenter,
         ),
